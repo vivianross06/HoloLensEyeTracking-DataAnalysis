@@ -180,3 +180,30 @@ ggplot(a_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movem
 ggplot(b_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movement)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
 
 
+#average errors: static recalibrated with wsBodyConstrained task
+average_moving_error_data <- read.csv("/Users/vivianross/Documents/School/Research/EyeTracking/HoloLensEyeTracking-DataAnalysis/Data/static_recalibrated_wsBodyConstrained_average_error.csv", header = TRUE, fileEncoding = 'UTF-8-BOM')
+#average errors: moving recalibrated with calibration task
+average_static_error_data <- read.csv("/Users/vivianross/Documents/School/Research/EyeTracking/HoloLensEyeTracking-DataAnalysis/Data/moving_recalibrated_wsBodyConstrained_average_error.csv", header = TRUE, fileEncoding = 'UTF-8-BOM')
+
+#add column to specify movement
+average_moving_error_data <- average_moving_error_data %>% add_column(movement = 'moving')
+average_static_error_data <- average_static_error_data %>% add_column(movement = 'static')
+
+#turn variables into factors
+average_moving_error_data$taskname = factor(average_moving_error_data$taskname)
+average_moving_error_data$hololens = factor(average_moving_error_data$hololens)
+average_moving_error_data$movement = factor(average_moving_error_data$movement)
+average_static_error_data$taskname = factor(average_static_error_data$taskname)
+average_static_error_data$hololens = factor(average_static_error_data$hololens)
+average_static_error_data$movement = factor(average_static_error_data$movement)
+
+#merge dataframes
+total_error = rbind(average_moving_error_data, average_static_error_data)
+
+#separate between HoloLenses
+a_average_error <- total_error[total_error$hololens=='A',]
+b_average_error <- total_error[total_error$hololens=='B',]
+
+#plot recalibrated euclidean error
+ggplot(a_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movement)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
+ggplot(b_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movement)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
