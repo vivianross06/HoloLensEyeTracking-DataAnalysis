@@ -36,6 +36,20 @@ ggplot(long_b_average_error, aes(x=taskname, y=ErrorValue, fill=ErrorType)) + ge
 ggplot(a_average_error, aes(x=taskname, y=cosineError)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean", fill='goldenrod') + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Cosine Error (degrees)')
 ggplot(b_average_error, aes(x=taskname, y=cosineError)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean", fill='goldenrod') + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Cosine Error (degrees)')
 
+#One way ANOVA: find differences in accuracy between tasks
+result <- aov(cosineError ~ taskname, data = a_average_error)
+summary(result)
+tukey_posthoc <- TukeyHSD(result)
+tukey_posthoc
+
+result <- aov(cosineError ~ taskname, data = b_average_error)
+summary(result)
+tukey_posthoc <- TukeyHSD(result)
+tukey_posthoc
+
+#ART ANOVA: determine if headset makes a difference
+model <- art(data = average_error_data, cosineError ~ taskname * hololens)
+anova(model)
 
 
 #average errors: recalibrated with ssHeadConstrained task
