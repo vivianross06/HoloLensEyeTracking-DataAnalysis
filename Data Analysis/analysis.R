@@ -19,6 +19,7 @@ average_error_data <- read.csv("/Users/vivianross/Documents/School/Research/EyeT
 #turn variables into factors
 average_error_data$taskname = factor(average_error_data$taskname)
 average_error_data$hololens = factor(average_error_data$hololens)
+average_error_data$id = factor(average_error_data$id)
 
 #separate between HoloLenses
 a_average_error <- average_error_data[average_error_data$hololens=='A',]
@@ -47,9 +48,10 @@ summary(result)
 tukey_posthoc <- TukeyHSD(result)
 tukey_posthoc
 
-#ART ANOVA: determine if headset makes a difference
-model <- art(data = average_error_data, cosineError ~ taskname * hololens)
-anova(model)
+#Two way mixed ANOVA: determine if headset makes a difference
+#https://www.datanovia.com/en/lessons/mixed-anova-in-r/
+result <- anova_test(data = average_error_data, dv = cosineError, wid=id, between=hololens, within=taskname)
+get_anova_table(result)
 
 
 #average errors: recalibrated with ssHeadConstrained task
