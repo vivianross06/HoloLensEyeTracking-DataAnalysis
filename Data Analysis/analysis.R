@@ -207,3 +207,44 @@ b_average_error <- total_error[total_error$hololens=='B',]
 #plot recalibrated euclidean error
 ggplot(a_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movement)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
 ggplot(b_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=movement)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
+
+
+
+
+#average errors: session 1 recalibrated with calibration task
+average_session1_error_data <- read.csv("/Users/vivianross/Documents/School/Research/EyeTracking/HoloLensEyeTracking-DataAnalysis/Data/session1_recalibrated_calibration_average_error.csv", header = TRUE, fileEncoding = 'UTF-8-BOM')
+#average errors: session 2 recalibrated with calibration task
+average_session2_error_data <- read.csv("/Users/vivianross/Documents/School/Research/EyeTracking/HoloLensEyeTracking-DataAnalysis/Data/session2_recalibrated_calibration_average_error.csv", header = TRUE, fileEncoding = 'UTF-8-BOM')
+
+#add column to specify movement
+average_session1_error_data <- average_session1_error_data %>% add_column(trial = 1)
+average_session2_error_data <- average_session2_error_data %>% add_column(trial = 2)
+
+#turn variables into factors
+average_session1_error_data$taskname = factor(average_session1_error_data$taskname)
+average_session1_error_data$hololens = factor(average_session1_error_data$hololens)
+average_session1_error_data$trial = factor(average_session1_error_data$trial)
+average_session2_error_data$taskname = factor(average_session2_error_data$taskname)
+average_session2_error_data$hololens = factor(average_session2_error_data$hololens)
+average_session2_error_data$trial = factor(average_session2_error_data$trial)
+
+#merge dataframes
+total_error = rbind(average_session1_error_data, average_session2_error_data)
+
+#separate between HoloLenses
+a_average_error <- total_error[total_error$hololens=='A',]
+b_average_error <- total_error[total_error$hololens=='B',]
+
+#plot cosine error
+ggplot(a_average_error, aes(x=taskname, y=cosineError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Cosine Error (degrees)') + scale_fill_discrete(name="", breaks=c('1', '2'), labels=c('Trial 1', 'Trial 2'))
+ggplot(b_average_error, aes(x=taskname, y=cosineError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Cosine Error (degrees)') + scale_fill_discrete(name="", breaks=c('1', '2'), labels=c('Trial 1', 'Trial 2'))
+
+#plot uncalibrated euclidean error
+ggplot(a_average_error, aes(x=taskname, y=euclideanError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Uncalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('1', '2'), labels=c('Trial 1', 'Trial 2'))
+ggplot(b_average_error, aes(x=taskname, y=euclideanError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Uncalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('1', '2'), labels=c('Trial 1', 'Trial 2'))
+
+#plot recalibrated euclidean error
+ggplot(a_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
+ggplot(b_average_error, aes(x=taskname, y=recalibratedEuclideanError, fill=trial)) + geom_bar(position=position_dodge(), stat = "summary", fun = "mean") + geom_errorbar(position=position_dodge(), stat="summary", fun.data="mean_se", fun.args = list(mult = 1.96)) + scale_x_discrete(name = "", limits=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), breaks=c('calibration', 'ssHeadConstrained', 'wsBodyConstrained', 'ssWalking', 'wsWalking', 'hallway'), labels=c('Calibration', 'Head Constrained', 'Body Constrained', 'Screen Stabilized Walking', 'World Stabilized Walking', 'Hallway')) + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + ylab('Recalibrated Euclidean Error (degrees)') + scale_fill_discrete(name="", breaks=c('moving', 'static'), labels=c('Moving', 'Static'))
+
+
